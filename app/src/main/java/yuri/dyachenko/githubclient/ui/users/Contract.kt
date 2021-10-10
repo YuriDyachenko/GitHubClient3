@@ -21,6 +21,7 @@ class Contract {
 
     abstract class Presenter : MvpPresenter<View>() {
         abstract fun onError()
+        abstract fun onUpdate()
         abstract fun onItemClicked(login: String)
     }
 }

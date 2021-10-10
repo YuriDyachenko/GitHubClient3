@@ -1,9 +1,9 @@
 package yuri.dyachenko.githubclient.ui.users
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
@@ -13,10 +13,10 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
 
     private var users: List<User> = listOf()
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun setUsers(list: List<User>) {
+    fun submitList(list: List<User>) {
+        val diffResult = DiffUtil.calculateDiff(DiffCallback(users, list), false)
         users = list
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(

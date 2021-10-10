@@ -13,13 +13,11 @@ class Presenter(
     private val router: Router
 ) : Contract.Presenter(), CoroutineScope by MainScope() {
 
-    override fun onFirstViewAttach() {
-        getData()
-    }
+    override fun onFirstViewAttach() = getData()
 
-    override fun onError() {
-        getData()
-    }
+    override fun onError() = getData()
+
+    override fun onUpdate() = getData()
 
     override fun onItemClicked(login: String) {
         router.navigateTo(Screens.user(login))

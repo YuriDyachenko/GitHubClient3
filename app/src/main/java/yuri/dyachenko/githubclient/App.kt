@@ -9,7 +9,7 @@ import yuri.dyachenko.githubclient.model.UsersRepo
 class App : Application() {
 
     companion object {
-        const val SIMULATION_DELAY_MILLIS = 3_000L
+        const val SIMULATION_DELAY_MILLIS = 1_000L
 
         val usersRepo: UsersRepo = UsersListRepoImpl()
 

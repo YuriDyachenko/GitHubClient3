@@ -1,8 +1,9 @@
 package yuri.dyachenko.githubclient.ui.users
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import android.view.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
@@ -26,7 +27,15 @@ class UsersFragment : MvpAppCompatFragment(), Contract.View {
         savedInstanceState: Bundle?
     ) = FragmentUsersBinding.inflate(inflater, container, false).also {
         _binding = it
-        binding.usersRecyclerView.adapter = adapter
+        binding.apply {
+            usersRecyclerView.addItemDecoration(
+                DividerItemDecoration(
+                    context,
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+            usersRecyclerView.adapter = adapter
+        }
     }.root
 
     override fun onDestroyView() {
@@ -38,7 +47,7 @@ class UsersFragment : MvpAppCompatFragment(), Contract.View {
         when (state) {
             is State.Success -> {
                 usersLoadingLayout.hide()
-                adapter.setUsers(state.list)
+                adapter.submitList(state.list)
             }
             State.Error -> {
                 usersLoadingLayout.hide()
@@ -51,6 +60,24 @@ class UsersFragment : MvpAppCompatFragment(), Contract.View {
                 usersLoadingLayout.show()
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        setHasOptionsMenu(true)
+        super.onCreate(savedInstanceState)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_users, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_update -> {
+            presenter.onUpdate()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {
