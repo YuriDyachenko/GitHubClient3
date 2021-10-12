@@ -1,19 +1,22 @@
 package yuri.dyachenko.githubclient.ui.users
 
 import android.os.Bundle
-import android.view.*
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUsersBinding
 import yuri.dyachenko.githubclient.ui.users.Contract.State
 
-class UsersFragment : MvpAppCompatFragment(), Contract.View {
+class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.View {
 
-    private var _binding: FragmentUsersBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentUsersBinding::bind)
 
     private val presenter by moxyPresenter {
         Presenter(App.usersRepo, App.router)
@@ -21,26 +24,12 @@ class UsersFragment : MvpAppCompatFragment(), Contract.View {
 
     private val adapter by lazy { Adapter(presenter) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentUsersBinding.inflate(inflater, container, false).also {
-        _binding = it
-        binding.apply {
-            usersRecyclerView.addItemDecoration(
-                DividerItemDecoration(
-                    context,
-                    LinearLayoutManager.VERTICAL
-                )
-            )
-            usersRecyclerView.adapter = adapter
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding.usersRecyclerView) {
+            addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
+            adapter = this@UsersFragment.adapter
         }
-    }.root
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 
     override fun setState(state: State) = with(binding) {

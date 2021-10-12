@@ -7,7 +7,6 @@ import yuri.dyachenko.githubclient.model.UsersRepo
 import yuri.dyachenko.githubclient.sometimes
 import yuri.dyachenko.githubclient.ui.Screens
 
-
 class Presenter(
     private val usersRepo: UsersRepo,
     private val router: Router

@@ -1,18 +1,15 @@
 package yuri.dyachenko.githubclient.ui.user
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUserBinding
 
-class UserFragment : MvpAppCompatFragment(), Contract.View {
+class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View {
 
-    private var _binding: FragmentUserBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentUserBinding::bind)
 
     private val userLogin: String by lazy {
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
@@ -20,19 +17,6 @@ class UserFragment : MvpAppCompatFragment(), Contract.View {
 
     private val presenter by moxyPresenter {
         Presenter(App.usersRepo, userLogin)
-    }
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentUserBinding.inflate(inflater, container, false)
-        .also { _binding = it }
-        .root
-
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
     }
 
     override fun setState(state: Contract.State) = with(binding) {
