@@ -23,7 +23,7 @@ class Presenter(
 
         disposables.add(
             usersRepo
-                 //для моделирования ошибки "User not found" иногда добавляем "1" к логину
+                //для моделирования ошибки "User not found" иногда добавляем "1" к логину
                 .getUserByLogin(login + if (sometimes()) "1" else "")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())

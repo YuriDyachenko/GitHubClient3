@@ -28,13 +28,15 @@ class UsersListRepoImpl : UsersRepo {
             Single.just(users)
         }.delay(App.SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
 
-    override fun getUserByLogin(login: String): Maybe<User> =
-        if (sometimes()) {
-            //для моделирования случайной ошибки
-            Maybe.error(SometimesException())
-        } else {
+    override fun getUserByLogin(login: String): Maybe<User> = (
             users.firstOrNull { user -> user.login == login }
-                ?.let { Maybe.just(it) }
+                ?.let {
+                    if (sometimes()) {
+                        Maybe.error(SometimesException())
+                    } else {
+                        Maybe.just(it)
+                    }
+                }
                 ?: Maybe.error(UserNotFoundException())
-        }.delay(App.SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            ).delay(App.SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
 }

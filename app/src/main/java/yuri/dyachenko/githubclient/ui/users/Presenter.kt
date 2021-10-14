@@ -31,7 +31,7 @@ class Presenter(
         disposables.add(
             usersRepo
                 .getUsers()
-                .subscribeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = { viewState.setState(Contract.State.Success(it)) },
