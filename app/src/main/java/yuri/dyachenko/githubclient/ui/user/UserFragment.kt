@@ -25,10 +25,10 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View
                 userLoadingLayout.hide()
                 userLoginTextView.text = state.user.login
             }
-            Contract.State.Error -> {
+            is Contract.State.Error -> {
                 userLoadingLayout.hide()
                 userRootView.showSnackBar(
-                    R.string.something_broke,
+                    state.e.message ?: getString(R.string.something_broke),
                     R.string.reload
                 ) { presenter.onError() }
             }

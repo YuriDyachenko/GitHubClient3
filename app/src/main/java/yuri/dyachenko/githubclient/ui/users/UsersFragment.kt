@@ -38,10 +38,10 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
                 usersLoadingLayout.hide()
                 adapter.submitList(state.list)
             }
-            State.Error -> {
+            is State.Error -> {
                 usersLoadingLayout.hide()
                 usersRootView.showSnackBar(
-                    R.string.something_broke,
+                    state.e.message ?: getString(R.string.something_broke),
                     R.string.reload
                 ) { presenter.onError() }
             }

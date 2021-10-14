@@ -9,7 +9,7 @@ class Contract {
 
     sealed class State {
         data class Success(val user: User) : State()
-        object Error : State()
+        data class Error(val e: Throwable) : State()
         object Loading : State()
     }
 

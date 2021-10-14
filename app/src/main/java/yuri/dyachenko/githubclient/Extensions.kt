@@ -18,11 +18,11 @@ fun View.hide() {
 }
 
 fun View.showSnackBar(
-    textId: Int,
+    text: String,
     actionTextId: Int,
     action: (View) -> Unit
 ) {
-    Snackbar.make(this, textId, Snackbar.LENGTH_INDEFINITE)
+    Snackbar.make(this, text, Snackbar.LENGTH_INDEFINITE)
         .setAction(actionTextId, action)
         .show()
 }

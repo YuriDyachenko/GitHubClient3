@@ -5,6 +5,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import yuri.dyachenko.githubclient.model.UsersRepo
+import yuri.dyachenko.githubclient.sometimes
 
 class Presenter(
     private val usersRepo: UsersRepo,
@@ -22,12 +23,13 @@ class Presenter(
 
         disposables.add(
             usersRepo
-                .getUserByLogin(login)
+                 //для моделирования ошибки "User not found" иногда добавляем "1" к логину
+                .getUserByLogin(login + if (sometimes()) "1" else "")
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = { viewState.setState(Contract.State.Success(it)) },
-                    onError = { viewState.setState(Contract.State.Error) }
+                    onError = { viewState.setState(Contract.State.Error(it)) }
                 )
         )
     }

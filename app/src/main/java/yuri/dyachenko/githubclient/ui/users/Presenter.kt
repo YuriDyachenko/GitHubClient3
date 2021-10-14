@@ -31,11 +31,11 @@ class Presenter(
         disposables.add(
             usersRepo
                 .getUsers()
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(Schedulers.computation())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                     onSuccess = { viewState.setState(Contract.State.Success(it)) },
-                    onError = { viewState.setState(Contract.State.Error) }
+                    onError = { viewState.setState(Contract.State.Error(it)) }
                 )
         )
     }
