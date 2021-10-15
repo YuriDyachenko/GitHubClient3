@@ -1,38 +1,48 @@
 package yuri.dyachenko.githubclient.ui.user
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.snackbar.Snackbar
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUserBinding
 
-class UserFragment : MvpAppCompatFragment(), Contract.View {
+class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View {
 
-    private var _binding: FragmentUserBinding? = null
-    private val binding get() = _binding!!
+    private val binding by viewBinding(FragmentUserBinding::bind)
 
     private val userLogin: String by lazy {
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
     }
 
     private val presenter by moxyPresenter {
-        Presenter(App.usersRepo, userLogin)
+        Presenter(app.usersRepo, userLogin)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ) = FragmentUserBinding.inflate(inflater, container, false)
-        .also { _binding = it }
-        .root
+    private val backPressedCallback = object : OnBackPressedCallback(false) {
+        override fun handleOnBackPressed() {
+        }
+    }
 
-    override fun onDestroyView() {
-        _binding = null
-        super.onDestroyView()
+    private val snackBarCallback = object : Snackbar.Callback() {
+
+        override fun onShown(sb: Snackbar?) {
+            super.onShown(sb)
+            backPressedCallback.isEnabled = true
+        }
+
+        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+            super.onDismissed(transientBottomBar, event)
+            backPressedCallback.isEnabled = false
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
 
     override fun setState(state: Contract.State) = with(binding) {
@@ -41,11 +51,12 @@ class UserFragment : MvpAppCompatFragment(), Contract.View {
                 userLoadingLayout.hide()
                 userLoginTextView.text = state.user.login
             }
-            Contract.State.Error -> {
+            is Contract.State.Error -> {
                 userLoadingLayout.hide()
                 userRootView.showSnackBar(
-                    R.string.something_broke,
-                    R.string.reload
+                    state.e.message ?: getString(R.string.something_broke),
+                    R.string.reload,
+                    snackBarCallback
                 ) { presenter.onError() }
             }
             Contract.State.Loading -> {
