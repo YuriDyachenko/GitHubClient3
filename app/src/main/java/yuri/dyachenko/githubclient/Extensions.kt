@@ -27,6 +27,18 @@ fun View.showSnackBar(
         .show()
 }
 
+fun View.showSnackBar(
+    text: String,
+    actionTextId: Int,
+    callback: Snackbar.Callback,
+    action: (View) -> Unit
+) {
+    Snackbar.make(this, text, Snackbar.LENGTH_INDEFINITE)
+        .setAction(actionTextId, action)
+        .addCallback(callback)
+        .show()
+}
+
 fun sometimes(): Boolean = (System.currentTimeMillis() / 1_000 % 2 == 0L)
 
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
