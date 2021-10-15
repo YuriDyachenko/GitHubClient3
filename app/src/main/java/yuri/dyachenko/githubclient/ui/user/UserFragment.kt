@@ -19,7 +19,7 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View
     }
 
     private val presenter by moxyPresenter {
-        Presenter(App.usersRepo, userLogin)
+        Presenter(app.usersRepo, userLogin)
     }
 
     private val backPressedCallback = object : OnBackPressedCallback(false) {

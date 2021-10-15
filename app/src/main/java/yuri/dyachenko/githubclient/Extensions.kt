@@ -1,9 +1,16 @@
 package yuri.dyachenko.githubclient
 
+import android.content.Context
 import android.view.View
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+
+val Context.app: App
+    get() = applicationContext as App
+
+val Fragment.app: App
+    get() = requireContext().app
 
 fun View.show() {
     if (visibility != View.VISIBLE) {

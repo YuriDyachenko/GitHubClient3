@@ -3,7 +3,7 @@ package yuri.dyachenko.githubclient.ui
 import android.os.Bundle
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
-import yuri.dyachenko.githubclient.App
+import yuri.dyachenko.githubclient.app
 
 class MainActivity : MvpAppCompatActivity() {
 
@@ -11,16 +11,16 @@ class MainActivity : MvpAppCompatActivity() {
 
     override fun onResumeFragments() {
         super.onResumeFragments()
-        App.navigatorHolder.setNavigator(navigator)
+        app.navigatorHolder.setNavigator(navigator)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        savedInstanceState ?: App.router.newRootScreen(Screens.users())
+        savedInstanceState ?: app.router.newRootScreen(Screens.users())
     }
 
     override fun onPause() {
-        App.navigatorHolder.removeNavigator()
+        app.navigatorHolder.removeNavigator()
         super.onPause()
     }
 }

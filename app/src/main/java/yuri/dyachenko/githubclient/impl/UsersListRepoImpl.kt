@@ -2,13 +2,14 @@ package yuri.dyachenko.githubclient.impl
 
 import io.reactivex.Maybe
 import io.reactivex.Single
-import yuri.dyachenko.githubclient.App
 import yuri.dyachenko.githubclient.model.SometimesException
 import yuri.dyachenko.githubclient.model.User
 import yuri.dyachenko.githubclient.model.UserNotFoundException
 import yuri.dyachenko.githubclient.model.UsersRepo
 import yuri.dyachenko.githubclient.sometimes
 import java.util.concurrent.TimeUnit
+
+const val SIMULATION_DELAY_MILLIS = 1_000L
 
 class UsersListRepoImpl : UsersRepo {
 
@@ -26,7 +27,7 @@ class UsersListRepoImpl : UsersRepo {
             Single.error(SometimesException())
         } else {
             Single.just(users)
-        }.delay(App.SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+        }.delay(SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
 
     override fun getUserByLogin(login: String): Maybe<User> = (
             users.firstOrNull { user -> user.login == login }
@@ -38,5 +39,5 @@ class UsersListRepoImpl : UsersRepo {
                     }
                 }
                 ?: Maybe.error(UserNotFoundException())
-            ).delay(App.SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+            ).delay(SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
 }
