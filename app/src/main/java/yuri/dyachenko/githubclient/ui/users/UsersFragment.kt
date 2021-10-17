@@ -8,9 +8,11 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import io.reactivex.disposables.CompositeDisposable
 import moxy.MvpAppCompatFragment
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
+import yuri.dyachenko.githubclient.bus.Event
 import yuri.dyachenko.githubclient.databinding.FragmentUsersBinding
 import yuri.dyachenko.githubclient.ui.users.Contract.State
 
@@ -24,12 +26,30 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
 
     private val adapter by lazy { Adapter(presenter) }
 
+    private val disposables = CompositeDisposable()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding.usersRecyclerView) {
             addItemDecoration(DividerItemDecoration(context, LinearLayoutManager.VERTICAL))
             adapter = this@UsersFragment.adapter
         }
+        subscribeOnEvents()
+    }
+
+    private fun subscribeOnEvents() {
+        disposables.add(
+            app.bus.get().subscribe { event ->
+                when (event) {
+                    is Event.UserUpdate -> {
+                        presenter.onUpdateUser(event.user)
+                    }
+                    Event.UsersUpdate -> {
+                        presenter.onUpdate()
+                    }
+                }
+            }
+        )
     }
 
     override fun setState(state: State) = with(binding) {
@@ -44,6 +64,9 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
                     state.e.message ?: getString(R.string.something_broke),
                     R.string.reload
                 ) { presenter.onError() }
+            }
+            is State.UserChanged -> {
+                adapter.submitUser(state.user)
             }
             State.Loading -> {
                 usersLoadingLayout.show()
@@ -63,10 +86,16 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.action_update -> {
-            presenter.onUpdate()
+            //presenter.onUpdate()
+            app.bus.post(Event.UsersUpdate)
             true
         }
         else -> super.onOptionsItemSelected(item)
+    }
+
+    override fun onDestroyView() {
+        disposables.clear()
+        super.onDestroyView()
     }
 
     companion object {

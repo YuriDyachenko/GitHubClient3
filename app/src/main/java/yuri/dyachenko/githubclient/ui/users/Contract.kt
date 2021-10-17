@@ -11,6 +11,7 @@ class Contract {
         data class Success(val list: List<User>) : State()
         data class Error(val e: Throwable) : State()
         object Loading : State()
+        data class UserChanged(val user: User) : State()
     }
 
     interface View : MvpView {
@@ -23,6 +24,7 @@ class Contract {
         abstract fun onError()
         abstract fun onUpdate()
         abstract fun onItemClicked(login: String)
+        abstract fun onUpdateUser(user: User)
     }
 }
 

@@ -1,6 +1,8 @@
 <resources>
-    <string name="app_name">Git Hub Client 03</string>
+    <string name="app_name">Git Hub Client 04</string>
     <string name="something_broke">Something broke</string>
     <string name="reload">Reload</string>
     <string name="action_update">Update</string>
+    <string name="user_like_button_text">like</string>
+    <string name="user_dislike_button_text">dislike</string>
 </resources>
