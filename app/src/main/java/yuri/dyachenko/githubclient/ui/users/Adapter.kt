@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
 import yuri.dyachenko.githubclient.model.User
+import kotlin.random.Random
 
 const val INDEX_NOT_FOUND = -1
 
@@ -29,6 +30,9 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
             notifyItemChanged(position)
         }
     }
+
+    fun getRandomUser(): User? =
+        if (users.size == 0) null else users[Random.nextInt(users.size)]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
