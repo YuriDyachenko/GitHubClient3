@@ -129,7 +129,7 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        R.id.action_update -> {
+        R.id.action_update_menu_item -> {
             app.bus.post(Event.UsersUpdate)
             true
         }
