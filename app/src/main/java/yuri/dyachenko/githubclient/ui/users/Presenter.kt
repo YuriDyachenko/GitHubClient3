@@ -5,6 +5,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import yuri.dyachenko.githubclient.model.User
 import yuri.dyachenko.githubclient.model.UsersRepo
 import yuri.dyachenko.githubclient.ui.Screens
 
@@ -25,6 +26,10 @@ class Presenter(
         router.navigateTo(Screens.user(login))
     }
 
+    override fun onUpdateUser(user: User) {
+        viewState.setState(Contract.State.UserChanged(user))
+    }
+
     private fun getData() {
         viewState.setState(Contract.State.Loading)
 
@@ -41,7 +46,7 @@ class Presenter(
     }
 
     override fun onDestroy() {
-        disposables.dispose()
+        disposables.clear()
         super.onDestroy()
     }
 }

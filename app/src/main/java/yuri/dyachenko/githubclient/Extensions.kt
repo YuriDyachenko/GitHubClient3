@@ -12,6 +12,8 @@ val Context.app: App
 val Fragment.app: App
     get() = requireContext().app
 
+fun Long.even() = this % 2 == 0L
+
 fun View.show() {
     if (visibility != View.VISIBLE) {
         visibility = View.VISIBLE

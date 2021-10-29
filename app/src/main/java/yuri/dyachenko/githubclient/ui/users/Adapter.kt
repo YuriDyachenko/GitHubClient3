@@ -8,16 +8,29 @@ import androidx.recyclerview.widget.RecyclerView
 import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
 import yuri.dyachenko.githubclient.model.User
+import kotlin.random.Random
 
 class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
-    private var users: List<User> = listOf()
+    private var users: MutableList<User> = mutableListOf()
 
     fun submitList(list: List<User>) {
         val diffResult = DiffUtil.calculateDiff(DiffCallback(users, list), false)
-        users = list
+        users.clear()
+        users.addAll(list)
         diffResult.dispatchUpdatesTo(this)
     }
+
+    fun submitUser(user: User) {
+        val position = users.indexOf(user)
+        if (position != INDEX_NOT_FOUND) {
+            users[position] = user
+            notifyItemChanged(position)
+        }
+    }
+
+    fun getRandomUser(): User? =
+        if (users.size == 0) null else users[Random.nextInt(users.size)]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
@@ -25,7 +38,7 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
     )
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(users[position].login)
+        holder.bind(users[position])
     }
 
     override fun getItemCount() = users.size
@@ -33,11 +46,17 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = UserItemLayoutBinding.bind(view)
 
-        fun bind(login: String) = with(binding) {
+        fun bind(user: User) = with(binding) {
             itemView.apply {
-                userLoginTextView.text = login
-                setOnClickListener { presenter.onItemClicked(login) }
+                userLoginTextView.text = user.login
+                userLikesTextView.text = user.likes.toString()
+                userDislikesTextView.text = user.dislikes.toString()
+                setOnClickListener { presenter.onItemClicked(user.login) }
             }
         }
+    }
+
+    companion object {
+        const val INDEX_NOT_FOUND = -1
     }
 }

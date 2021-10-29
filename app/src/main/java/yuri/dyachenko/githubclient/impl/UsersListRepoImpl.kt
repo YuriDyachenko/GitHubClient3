@@ -40,4 +40,22 @@ class UsersListRepoImpl : UsersRepo {
                 }
                 ?: Maybe.error(UserNotFoundException())
             ).delay(SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+
+    override fun likeUserByLogin(login: String): Maybe<User> = (
+            users.firstOrNull { user -> user.login == login }
+                ?.let {
+                    it.likes++
+                    Maybe.just(it)
+                }
+                ?: Maybe.error(UserNotFoundException())
+            ).delay(SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
+
+    override fun dislikeUserByLogin(login: String): Maybe<User> = (
+            users.firstOrNull { user -> user.login == login }
+                ?.let {
+                    it.dislikes++
+                    Maybe.just(it)
+                }
+                ?: Maybe.error(UserNotFoundException())
+            ).delay(SIMULATION_DELAY_MILLIS, TimeUnit.MILLISECONDS)
 }

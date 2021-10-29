@@ -1,6 +1,7 @@
 package yuri.dyachenko.githubclient.ui.user
 
 import android.os.Bundle
+import android.view.View
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
@@ -19,7 +20,7 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View
     }
 
     private val presenter by moxyPresenter {
-        Presenter(app.usersRepo, userLogin)
+        Presenter(app.usersRepo, userLogin, app.bus)
     }
 
     private val backPressedCallback = object : OnBackPressedCallback(false) {
@@ -63,6 +64,16 @@ class UserFragment : MvpAppCompatFragment(R.layout.fragment_user), Contract.View
                 userLoadingLayout.show()
             }
         }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initButtons()
+    }
+
+    private fun initButtons() = with(binding) {
+        userLikeButton.setOnClickListener { presenter.onLike() }
+        userDislikeButton.setOnClickListener { presenter.onDislike() }
     }
 
     companion object {

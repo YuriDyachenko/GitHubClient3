@@ -21,5 +21,7 @@ class Contract {
 
     abstract class Presenter : MvpPresenter<View>() {
         abstract fun onError()
+        abstract fun onLike()
+        abstract fun onDislike()
     }
 }
