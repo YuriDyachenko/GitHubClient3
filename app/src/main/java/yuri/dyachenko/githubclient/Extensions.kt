@@ -12,8 +12,6 @@ val Context.app: App
 val Fragment.app: App
     get() = requireContext().app
 
-fun Long.even() = this % 2 == 0L
-
 fun View.show() {
     if (visibility != View.VISIBLE) {
         visibility = View.VISIBLE
@@ -47,8 +45,6 @@ fun View.showSnackBar(
         .addCallback(callback)
         .show()
 }
-
-fun sometimes(): Boolean = (System.currentTimeMillis() / 1_000 % 2 == 0L)
 
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
     this.arguments = bundleOf(*arguments)

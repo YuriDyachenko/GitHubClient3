@@ -3,6 +3,4 @@
     <string name="something_broke">Something broke</string>
     <string name="reload">Reload</string>
     <string name="action_update">Update</string>
-    <string name="user_like_button_text">like</string>
-    <string name="user_dislike_button_text">dislike</string>
 </resources>

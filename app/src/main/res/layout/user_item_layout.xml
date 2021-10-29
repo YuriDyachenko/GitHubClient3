@@ -9,33 +9,12 @@
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/user_login_text_view"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_10"
-        android:layout_weight="6"
+        android:layout_marginEnd="@dimen/margin_10"
         android:textColor="@color/purple_700"
         android:textSize="@dimen/user_item_text_size"
         tools:text="Ivanov" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/user_likes_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/green_700"
-        android:textSize="@dimen/user_item_text_size"
-        tools:text="5" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/user_dislikes_text_view"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/margin_10"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:textColor="@color/red_700"
-        android:textSize="@dimen/user_item_text_size"
-        tools:text="3" />
 
 </LinearLayout>

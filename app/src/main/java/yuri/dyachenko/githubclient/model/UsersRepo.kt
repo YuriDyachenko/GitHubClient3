@@ -7,6 +7,4 @@ interface UsersRepo {
 
     fun getUsers(): Single<List<User>>
     fun getUserByLogin(login: String): Maybe<User>
-    fun likeUserByLogin(login: String): Maybe<User>
-    fun dislikeUserByLogin(login: String): Maybe<User>
 }

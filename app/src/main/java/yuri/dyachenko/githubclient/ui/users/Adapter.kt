@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
 import yuri.dyachenko.githubclient.model.User
-import kotlin.random.Random
 
 class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
@@ -20,17 +19,6 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
         users.addAll(list)
         diffResult.dispatchUpdatesTo(this)
     }
-
-    fun submitUser(user: User) {
-        val position = users.indexOf(user)
-        if (position != INDEX_NOT_FOUND) {
-            users[position] = user
-            notifyItemChanged(position)
-        }
-    }
-
-    fun getRandomUser(): User? =
-        if (users.size == 0) null else users[Random.nextInt(users.size)]
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context)
@@ -49,14 +37,8 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
         fun bind(user: User) = with(binding) {
             itemView.apply {
                 userLoginTextView.text = user.login
-                userLikesTextView.text = user.likes.toString()
-                userDislikesTextView.text = user.dislikes.toString()
                 setOnClickListener { presenter.onItemClicked(user.login) }
             }
         }
-    }
-
-    companion object {
-        const val INDEX_NOT_FOUND = -1
     }
 }
