@@ -51,16 +51,16 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
                 .subscribe { v ->
                     adapter.getRandomUser()?.let {
                         if (v.even()) {
-                            likeUser(it)
+                            increaseUserLikes(it)
                         } else {
-                            dislikeUser(it)
+                            increaseUserDislikes(it)
                         }
                     }
                 }
         )
     }
 
-    private fun likeUser(user: User) {
+    private fun increaseUserLikes(user: User) {
         disposables.add(
             app.usersRepo
                 .likeUserByLogin(user.login)
@@ -70,7 +70,7 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
         )
     }
 
-    private fun dislikeUser(user: User) {
+    private fun increaseUserDislikes(user: User) {
         disposables.add(
             app.usersRepo
                 .dislikeUserByLogin(user.login)

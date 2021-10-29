@@ -10,8 +10,6 @@ import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
 import yuri.dyachenko.githubclient.model.User
 import kotlin.random.Random
 
-const val INDEX_NOT_FOUND = -1
-
 class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private var users: MutableList<User> = mutableListOf()
@@ -56,5 +54,9 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
                 setOnClickListener { presenter.onItemClicked(user.login) }
             }
         }
+    }
+
+    companion object {
+        const val INDEX_NOT_FOUND = -1
     }
 }
