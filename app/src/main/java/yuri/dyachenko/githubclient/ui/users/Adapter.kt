@@ -43,7 +43,7 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
                     R.drawable.ic_launcher_background,
                     R.drawable.ic_launcher_foreground
                 )
-                setOnClickListener { presenter.onItemClicked(user.login) }
+                setOnClickListener { presenter.onItemClicked(user.login, user.id) }
             }
         }
     }

@@ -3,4 +3,9 @@
     <string name="something_broke">Something broke</string>
     <string name="reload">Reload</string>
     <string name="action_update">Update</string>
+    <string name="repo_repository_label">repository name:</string>
+    <string name="repo_forks_label">forks count:</string>
+    <string name="user_name_label">github user name:</string>
+    <string name="user_repositories_label">repositories:</string>
+    <string name="users_names_label">github users:</string>
 </resources>

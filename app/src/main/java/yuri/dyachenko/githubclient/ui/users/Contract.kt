@@ -1,9 +1,9 @@
 package yuri.dyachenko.githubclient.ui.users
 
-import moxy.MvpPresenter
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
 import yuri.dyachenko.githubclient.model.User
+import yuri.dyachenko.githubclient.ui.base.BasePresenter
 
 class Contract {
 
@@ -19,10 +19,10 @@ class Contract {
         fun setState(state: State)
     }
 
-    abstract class Presenter : MvpPresenter<View>() {
+    abstract class Presenter : BasePresenter<View>() {
         abstract fun onError()
         abstract fun onUpdate()
-        abstract fun onItemClicked(login: String)
+        abstract fun onItemClicked(login: String, id: Int)
     }
 }
 

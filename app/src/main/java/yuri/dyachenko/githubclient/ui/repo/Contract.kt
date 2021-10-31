@@ -1,4 +1,4 @@
-package yuri.dyachenko.githubclient.ui.user
+package yuri.dyachenko.githubclient.ui.repo
 
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
@@ -8,7 +8,7 @@ import yuri.dyachenko.githubclient.ui.base.BasePresenter
 class Contract {
 
     sealed class State {
-        data class Success(val list: List<Repo>) : State()
+        data class Success(val repo: Repo) : State()
         data class Error(val e: Throwable) : State()
         object Loading : State()
     }
@@ -21,6 +21,5 @@ class Contract {
 
     abstract class Presenter : BasePresenter<View>() {
         abstract fun onError()
-        abstract fun onItemClicked(id: Int)
     }
 }

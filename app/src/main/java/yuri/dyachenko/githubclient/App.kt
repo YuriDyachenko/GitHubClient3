@@ -3,12 +3,12 @@ package yuri.dyachenko.githubclient
 import android.app.Application
 import com.github.terrakok.cicerone.Cicerone
 import com.github.terrakok.cicerone.Router
-import yuri.dyachenko.githubclient.impl.UsersListRepoImpl
-import yuri.dyachenko.githubclient.model.UsersRepo
+import yuri.dyachenko.githubclient.impl.ListDataProviderImpl
+import yuri.dyachenko.githubclient.model.DataProvider
 
 class App : Application() {
 
-    val usersRepo: UsersRepo = UsersListRepoImpl()
+    val dataProvider: DataProvider = ListDataProviderImpl()
 
     private val cicerone: Cicerone<Router> by lazy { Cicerone.create() }
     val navigatorHolder = cicerone.getNavigatorHolder()

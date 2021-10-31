@@ -19,7 +19,7 @@ class UsersFragment : MvpAppCompatFragment(R.layout.fragment_users), Contract.Vi
     private val binding by viewBinding(FragmentUsersBinding::bind)
 
     private val presenter by moxyPresenter {
-        Presenter(app.usersRepo, app.router)
+        Presenter(app.dataProvider, app.router)
     }
 
     private val adapter by lazy { Adapter(presenter) }
