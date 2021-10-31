@@ -2,8 +2,10 @@ package yuri.dyachenko.githubclient
 
 import android.content.Context
 import android.view.View
+import android.widget.ImageView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 
 val Context.app: App
@@ -12,7 +14,13 @@ val Context.app: App
 val Fragment.app: App
     get() = requireContext().app
 
-fun Long.even() = this % 2 == 0L
+fun ImageView.loadImage(url: String?, placeholderId: Int, errorId: Int) {
+    Glide.with(this)
+        .load(url)
+        .placeholder(placeholderId)
+        .error(errorId)
+        .into(this)
+}
 
 fun View.show() {
     if (visibility != View.VISIBLE) {
@@ -47,8 +55,6 @@ fun View.showSnackBar(
         .addCallback(callback)
         .show()
 }
-
-fun sometimes(): Boolean = (System.currentTimeMillis() / 1_000 % 2 == 0L)
 
 fun Fragment.arguments(vararg arguments: Pair<String, Any>): Fragment {
     this.arguments = bundleOf(*arguments)

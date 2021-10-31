@@ -5,4 +5,7 @@
     <dimen name="user_item_text_size">22sp</dimen>
     <dimen name="user_item_height">60dp</dimen>
     <dimen name="margin_10">10dp</dimen>
+    <dimen name="repo_text_size">40sp</dimen>
+    <dimen name="repo_labels_size">20sp</dimen>
+    <dimen name="user_labels_size">20sp</dimen>
 </resources>

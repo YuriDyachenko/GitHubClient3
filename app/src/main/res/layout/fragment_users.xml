@@ -7,15 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".ui.users.UsersFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/users_recycler_view"
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/user_item_layout" />
+        android:layout_margin="@dimen/margin_10"
+        android:orientation="vertical" >
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/users_names_label"
+            android:textColor="@color/teal_700"
+            android:textSize="@dimen/repo_labels_size" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/users_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:listitem="@layout/user_item_layout" />
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
 
     <FrameLayout
         android:id="@+id/users_loading_layout"
