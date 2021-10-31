@@ -7,7 +7,8 @@ import yuri.dyachenko.githubclient.model.DataProvider
 
 class Presenter(
     private val dataProvider: DataProvider,
-    private val id: Int
+    private val userLogin: String,
+    private val repoName: String
 ) : Contract.Presenter() {
 
     override fun onFirstViewAttach() = getData()
@@ -18,7 +19,7 @@ class Presenter(
         viewState.setState(Contract.State.Loading)
 
         dataProvider
-            .getRepoById(id)
+            .getRepo(userLogin, repoName)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

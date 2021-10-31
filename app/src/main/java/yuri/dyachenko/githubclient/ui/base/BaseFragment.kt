@@ -31,5 +31,4 @@ abstract class BlockingBackFragment(
         super.onCreate(savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
     }
-
 }

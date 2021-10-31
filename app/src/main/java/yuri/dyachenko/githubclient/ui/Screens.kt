@@ -8,6 +8,9 @@ import yuri.dyachenko.githubclient.ui.users.UsersFragment
 object Screens {
 
     fun users() = FragmentScreen { UsersFragment.newInstance() }
-    fun user(login: String, id: Int) = FragmentScreen { UserFragment.newInstance(login, id) }
-    fun repo(id: Int) = FragmentScreen { RepoFragment.newInstance(id) }
+
+    fun user(userLogin: String) = FragmentScreen { UserFragment.newInstance(userLogin) }
+
+    fun repo(userLogin: String, repoName: String) =
+        FragmentScreen { RepoFragment.newInstance(userLogin, repoName) }
 }

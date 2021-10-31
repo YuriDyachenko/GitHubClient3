@@ -1,7 +1,9 @@
 package yuri.dyachenko.githubclient.model
 
+import com.google.gson.annotations.SerializedName
+
 data class User(
-    val id: Int,
-    val login: String,
-    val avatar_url: String?
+    @SerializedName("id") val id: Int,
+    @SerializedName("login") val login: String,
+    @SerializedName("avatar_url") val avatarUrl: String?
 )

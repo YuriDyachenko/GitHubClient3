@@ -9,7 +9,10 @@ import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.RepoItemLayoutBinding
 import yuri.dyachenko.githubclient.model.Repo
 
-class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.ViewHolder>() {
+class Adapter(
+    private val presenter: Presenter,
+    private val userLogin: String
+) : RecyclerView.Adapter<Adapter.ViewHolder>() {
 
     private var repos: MutableList<Repo> = mutableListOf()
 
@@ -37,7 +40,7 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
         fun bind(repo: Repo) = with(binding) {
             itemView.apply {
                 repoNameTextView.text = repo.name
-                setOnClickListener { presenter.onItemClicked(repo.id) }
+                setOnClickListener { presenter.onItemClicked(userLogin, repo.name) }
             }
         }
     }

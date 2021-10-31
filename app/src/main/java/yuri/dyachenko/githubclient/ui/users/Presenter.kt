@@ -18,8 +18,8 @@ class Presenter(
 
     override fun onUpdate() = getData()
 
-    override fun onItemClicked(login: String, id: Int) {
-        router.navigateTo(Screens.user(login, id))
+    override fun onItemClicked(userLogin: String) {
+        router.navigateTo(Screens.user(userLogin))
     }
 
     private fun getData() {

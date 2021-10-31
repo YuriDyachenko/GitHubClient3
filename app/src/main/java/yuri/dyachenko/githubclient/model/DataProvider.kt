@@ -6,6 +6,6 @@ import io.reactivex.Single
 interface DataProvider {
 
     fun getUsers(): Single<List<User>>
-    fun getReposByUserId(id: Int): Single<List<Repo>>
-    fun getRepoById(id: Int): Maybe<Repo>
+    fun getRepos(userLogin: String): Single<List<Repo>>
+    fun getRepo(userLogin: String, repoName: String): Maybe<Repo>
 }

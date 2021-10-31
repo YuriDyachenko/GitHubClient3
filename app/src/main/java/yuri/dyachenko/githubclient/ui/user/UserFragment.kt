@@ -19,15 +19,11 @@ class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
     }
 
-    private val userId: Int by lazy {
-        arguments?.getInt(ARG_USER_ID) ?: NO_USER_ID
-    }
-
     private val presenter by moxyPresenter {
-        Presenter(app.dataProvider, app.router, userId)
+        Presenter(app.dataProvider, app.router, userLogin)
     }
 
-    private val adapter by lazy { Adapter(presenter) }
+    private val adapter by lazy { Adapter(presenter, userLogin) }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -60,14 +56,9 @@ class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View
 
     companion object {
         private const val ARG_USER_LOGIN = "ARG_USER_LOGIN"
-        private const val ARG_USER_ID = "ARG_USER_ID"
-        private const val NO_USER_ID = 0
 
-        fun newInstance(login: String, id: Int): Fragment =
+        fun newInstance(login: String): Fragment =
             UserFragment()
-                .arguments(
-                    ARG_USER_LOGIN to login,
-                    ARG_USER_ID to id
-                )
+                .arguments(ARG_USER_LOGIN to login)
     }
 }

@@ -10,22 +10,22 @@ import yuri.dyachenko.githubclient.ui.Screens
 class Presenter(
     private val dataProvider: DataProvider,
     private val router: Router,
-    private val id: Int
+    private val userLogin: String
 ) : Contract.Presenter() {
 
     override fun onFirstViewAttach() = getData()
 
     override fun onError() = getData()
 
-    override fun onItemClicked(id: Int) {
-        router.navigateTo(Screens.repo(id))
+    override fun onItemClicked(userLogin: String, repoName: String) {
+        router.navigateTo(Screens.repo(userLogin, repoName))
     }
 
     private fun getData() {
         viewState.setState(Contract.State.Loading)
 
         dataProvider
-            .getReposByUserId(id)
+            .getRepos(userLogin)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(

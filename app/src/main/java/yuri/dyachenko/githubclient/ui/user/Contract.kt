@@ -21,6 +21,6 @@ class Contract {
 
     abstract class Presenter : BasePresenter<View>() {
         abstract fun onError()
-        abstract fun onItemClicked(id: Int)
+        abstract fun onItemClicked(userLogin: String, repoName: String)
     }
 }

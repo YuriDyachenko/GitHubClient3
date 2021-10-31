@@ -11,12 +11,16 @@ class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View
 
     private val binding by viewBinding(FragmentRepoBinding::bind)
 
-    private val repoId: Int by lazy {
-        arguments?.getInt(ARG_REPO_ID) ?: NO_REPO_ID
+    private val userLogin: String by lazy {
+        arguments?.getString(ARG_USER_LOGIN).orEmpty()
+    }
+
+    private val repoName: String by lazy {
+        arguments?.getString(ARG_REPO_NAME).orEmpty()
     }
 
     private val presenter by moxyPresenter {
-        Presenter(app.dataProvider, repoId)
+        Presenter(app.dataProvider, userLogin, repoName)
     }
 
     override fun setState(state: Contract.State) = with(binding) {
@@ -41,11 +45,14 @@ class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View
     }
 
     companion object {
-        private const val ARG_REPO_ID = "ARG_REPO_ID"
-        private const val NO_REPO_ID = 0
+        private const val ARG_USER_LOGIN = "ARG_USER_LOGIN"
+        private const val ARG_REPO_NAME = "ARG_REPO_NAME"
 
-        fun newInstance(repoId: Int): Fragment =
+        fun newInstance(userLogin: String, repoName: String): Fragment =
             RepoFragment()
-                .arguments(ARG_REPO_ID to repoId)
+                .arguments(
+                    ARG_USER_LOGIN to userLogin,
+                    ARG_REPO_NAME to repoName
+                )
     }
 }
