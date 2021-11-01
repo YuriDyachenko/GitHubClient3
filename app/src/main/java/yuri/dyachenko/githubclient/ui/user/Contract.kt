@@ -1,14 +1,14 @@
 package yuri.dyachenko.githubclient.ui.user
 
-import moxy.MvpPresenter
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
-import yuri.dyachenko.githubclient.model.User
+import yuri.dyachenko.githubclient.model.Repo
+import yuri.dyachenko.githubclient.ui.base.BasePresenter
 
 class Contract {
 
     sealed class State {
-        data class Success(val user: User) : State()
+        data class Success(val list: List<Repo>) : State()
         data class Error(val e: Throwable) : State()
         object Loading : State()
     }
@@ -19,7 +19,8 @@ class Contract {
         fun setState(state: State)
     }
 
-    abstract class Presenter : MvpPresenter<View>() {
+    abstract class Presenter : BasePresenter<View>() {
         abstract fun onError()
+        abstract fun onItemClicked(userLogin: String, repoName: String)
     }
 }

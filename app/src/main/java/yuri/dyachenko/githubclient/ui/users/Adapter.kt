@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import yuri.dyachenko.githubclient.R
 import yuri.dyachenko.githubclient.databinding.UserItemLayoutBinding
+import yuri.dyachenko.githubclient.loadImage
 import yuri.dyachenko.githubclient.model.User
 
 class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.ViewHolder>() {
@@ -37,6 +38,11 @@ class Adapter(private val presenter: Presenter) : RecyclerView.Adapter<Adapter.V
         fun bind(user: User) = with(binding) {
             itemView.apply {
                 userLoginTextView.text = user.login
+                userAvatarImageView.loadImage(
+                    user.avatarUrl,
+                    R.drawable.ic_launcher_background,
+                    R.drawable.ic_launcher_foreground
+                )
                 setOnClickListener { presenter.onItemClicked(user.login) }
             }
         }
