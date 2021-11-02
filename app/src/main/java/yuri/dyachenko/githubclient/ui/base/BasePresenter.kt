@@ -7,6 +7,8 @@ import moxy.MvpView
 
 abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
 
+    var isOnline: Boolean = false
+
     private val disposables = CompositeDisposable()
 
     override fun onDestroy() {
@@ -17,4 +19,7 @@ abstract class BasePresenter<V : MvpView> : MvpPresenter<V>() {
     fun Disposable.autoDispose() {
         disposables.add(this)
     }
+
+    abstract fun onError()
+    abstract fun onUpdate()
 }

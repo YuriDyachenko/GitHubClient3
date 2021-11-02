@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Git Hub Client 05</string>
+    <string name="app_name">Git Hub Client 06</string>
     <string name="something_broke">Something broke</string>
     <string name="reload">Reload</string>
     <string name="action_update">Update</string>
@@ -8,4 +8,6 @@
     <string name="user_name_label">github user name:</string>
     <string name="user_repositories_label">repositories:</string>
     <string name="users_names_label">github users:</string>
+    <string name="from_web">web</string>
+    <string name="from_cache">room</string>
 </resources>

@@ -1,6 +1,7 @@
 package yuri.dyachenko.githubclient.ui.user
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -9,9 +10,10 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUserBinding
-import yuri.dyachenko.githubclient.ui.base.BlockingBackFragment
+import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
+import yuri.dyachenko.githubclient.ui.base.BaseFragment
 
-class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View {
+class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
 
     private val binding by viewBinding(FragmentUserBinding::bind)
 
@@ -20,7 +22,14 @@ class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View
     }
 
     private val presenter by moxyPresenter {
-        Presenter(app.dataProvider, app.router, userLogin)
+        Presenter(
+            app.dataProvider,
+            app.roomDataProvider,
+            app.roomDataSaveProvider,
+            AndroidNetworkStatusObservable(app),
+            app.router,
+            userLogin
+        )
     }
 
     private val adapter by lazy { Adapter(presenter, userLogin) }
@@ -39,6 +48,8 @@ class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View
                 userLoadingLayout.hide()
                 userLoginTextView.text = userLogin
                 adapter.submitList(state.list)
+                userFromTextView.text =
+                    getString(if (state.fromCache) R.string.from_cache else R.string.from_web)
             }
             is Contract.State.Error -> {
                 userLoadingLayout.hide()
@@ -52,6 +63,14 @@ class UserFragment : BlockingBackFragment(R.layout.fragment_user), Contract.View
                 userLoadingLayout.show()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_update_menu_item -> {
+            presenter.onUpdate()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {

@@ -1,13 +1,15 @@
 package yuri.dyachenko.githubclient.ui.repo
 
+import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentRepoBinding
-import yuri.dyachenko.githubclient.ui.base.BlockingBackFragment
+import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
+import yuri.dyachenko.githubclient.ui.base.BaseFragment
 
-class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View {
+class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
 
     private val binding by viewBinding(FragmentRepoBinding::bind)
 
@@ -20,7 +22,13 @@ class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View
     }
 
     private val presenter by moxyPresenter {
-        Presenter(app.dataProvider, userLogin, repoName)
+        Presenter(
+            app.dataProvider,
+            app.roomDataProvider,
+            AndroidNetworkStatusObservable(app),
+            userLogin,
+            repoName
+        )
     }
 
     override fun setState(state: Contract.State) = with(binding) {
@@ -29,6 +37,8 @@ class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View
                 repoLoadingLayout.hide()
                 repoNameTextView.text = state.repo.name
                 repoForksCountTextView.text = state.repo.forksCount.toString()
+                repoFromTextView.text =
+                    getString(if (state.fromCache) R.string.from_cache else R.string.from_web)
             }
             is Contract.State.Error -> {
                 repoLoadingLayout.hide()
@@ -42,6 +52,14 @@ class RepoFragment : BlockingBackFragment(R.layout.fragment_repo), Contract.View
                 repoLoadingLayout.show()
             }
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_update_menu_item -> {
+            presenter.onUpdate()
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
     }
 
     companion object {
