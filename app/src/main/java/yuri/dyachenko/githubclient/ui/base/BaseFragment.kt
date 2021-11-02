@@ -1,12 +1,16 @@
 package yuri.dyachenko.githubclient.ui.base
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
 import androidx.activity.OnBackPressedCallback
 import com.google.android.material.snackbar.Snackbar
 import moxy.MvpAppCompatFragment
+import yuri.dyachenko.githubclient.R
 
-abstract class BlockingBackFragment(
-    contentLayoutId: Int
+abstract class BaseFragment(
+    contentLayoutId: Int,
+    private val blockBackPressed: Boolean = false
 ) : MvpAppCompatFragment(contentLayoutId) {
 
     private val backPressedCallback = object : OnBackPressedCallback(false) {
@@ -29,6 +33,16 @@ abstract class BlockingBackFragment(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requireActivity().onBackPressedDispatcher.addCallback(this, backPressedCallback)
+        if (blockBackPressed) {
+            requireActivity()
+                .onBackPressedDispatcher
+                .addCallback(this, backPressedCallback)
+        }
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_users, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 }

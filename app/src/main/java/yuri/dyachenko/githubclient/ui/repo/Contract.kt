@@ -8,7 +8,7 @@ import yuri.dyachenko.githubclient.ui.base.BasePresenter
 class Contract {
 
     sealed class State {
-        data class Success(val repo: Repo) : State()
+        data class Success(val repo: Repo, val fromCache: Boolean) : State()
         data class Error(val e: Throwable) : State()
         object Loading : State()
     }
@@ -19,7 +19,5 @@ class Contract {
         fun setState(state: State)
     }
 
-    abstract class Presenter : BasePresenter<View>() {
-        abstract fun onError()
-    }
+    abstract class Presenter : BasePresenter<View>()
 }

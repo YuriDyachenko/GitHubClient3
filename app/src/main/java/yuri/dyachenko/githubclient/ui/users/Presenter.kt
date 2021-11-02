@@ -5,14 +5,33 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import yuri.dyachenko.githubclient.model.DataProvider
+import yuri.dyachenko.githubclient.model.DataSaveProvider
+import yuri.dyachenko.githubclient.model.User
+import yuri.dyachenko.githubclient.network.NetworkStatusObservable
 import yuri.dyachenko.githubclient.ui.Screens
 
 class Presenter(
     private val dataProvider: DataProvider,
+    private val cacheDataProvider: DataProvider,
+    private val saveDataProvider: DataSaveProvider,
+    private val networkStatusObservable: NetworkStatusObservable,
     private val router: Router
 ) : Contract.Presenter() {
 
-    override fun onFirstViewAttach() = getData()
+    private fun subscribeOnNetworkState() {
+        networkStatusObservable
+            .isOnline()
+            .subscribe { isOnline = it }
+            .autoDispose()
+    }
+
+    private fun defaultProvider() =
+        if (isOnline) dataProvider else cacheDataProvider
+
+    override fun onFirstViewAttach() {
+        subscribeOnNetworkState()
+        getData()
+    }
 
     override fun onError() = getData()
 
@@ -25,13 +44,24 @@ class Presenter(
     private fun getData() {
         viewState.setState(Contract.State.Loading)
 
-        dataProvider
+        defaultProvider()
             .getUsers()
             .subscribeOn(Schedulers.newThread())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnSuccess { saveData(it) }
             .subscribeBy(
-                onSuccess = { viewState.setState(Contract.State.Success(it)) },
+                onSuccess = { viewState.setState(Contract.State.Success(it, !isOnline)) },
                 onError = { viewState.setState(Contract.State.Error(it)) }
             ).autoDispose()
+    }
+
+    private fun saveData(users: List<User>) {
+        if (isOnline) {
+            saveDataProvider
+                .addUsers(users)
+                .subscribeOn(Schedulers.newThread())
+                .subscribe()
+                .autoDispose()
+        }
     }
 }
