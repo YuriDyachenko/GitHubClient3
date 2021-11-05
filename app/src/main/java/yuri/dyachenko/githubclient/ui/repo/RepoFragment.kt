@@ -4,14 +4,21 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
+import org.koin.android.ext.android.inject
+import org.koin.core.qualifier.named
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentRepoBinding
+import yuri.dyachenko.githubclient.di.RETROFIT_NAMED
+import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
 
 class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
 
     private val binding by viewBinding(FragmentRepoBinding::bind)
+
+    private val webDataProvider by inject<DataProvider>(named(RETROFIT_NAMED))
+    private val roomDataProvider by inject<DataProvider>()
 
     private val userLogin: String by lazy {
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
@@ -23,8 +30,8 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
 
     private val presenter by moxyPresenter {
         Presenter(
-            app.dataProvider,
-            app.roomDataProvider,
+            webDataProvider,
+            roomDataProvider,
             AndroidNetworkStatusObservable(app),
             userLogin,
             repoName
