@@ -16,9 +16,10 @@ class Presenter(
     private val saveDataProvider: DataSaveProvider,
     private val networkStatusObservable: NetworkStatusObservable,
     private val router: Router,
-    private val screens: Screens,
-    private val userLogin: String
+    private val screens: Screens
 ) : Contract.Presenter() {
+
+    private lateinit var userLogin: String
 
     private fun subscribeOnNetworkState() {
         networkStatusObservable
@@ -32,6 +33,11 @@ class Presenter(
 
     override fun onFirstViewAttach() {
         subscribeOnNetworkState()
+        viewState.getData()
+    }
+
+    override fun onDataReady(userLogin: String) {
+        this.userLogin = userLogin
         getData()
     }
 

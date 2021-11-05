@@ -13,6 +13,7 @@ class MainActivity : MvpAppCompatActivity() {
     private val navigator = AppNavigator(this, android.R.id.content)
 
     private val navigatorHolder by inject<NavigatorHolder>()
+
     private val router by inject<Router>()
 
     override fun onResumeFragments() {

@@ -22,8 +22,9 @@ import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
 import yuri.dyachenko.githubclient.room.Storage
 import yuri.dyachenko.githubclient.ui.AppScreens
 import yuri.dyachenko.githubclient.ui.Screens
+import yuri.dyachenko.githubclient.ui.users.Presenter
 
-const val RETROFIT_NAMED = "web"
+private const val RETROFIT_NAMED = "web"
 
 val ciceroneModule = module {
     single {
@@ -114,5 +115,37 @@ val networkStatusModule = module {
 val navigationModule = module {
     single<Screens> {
         AppScreens()
+    }
+}
+
+val presentersModule = module {
+    factory {
+        Presenter(
+            get(named(RETROFIT_NAMED)),
+            get(),
+            get(),
+            get<AndroidNetworkStatusObservable>(),
+            get(),
+            get()
+        )
+    }
+
+    factory {
+        yuri.dyachenko.githubclient.ui.user.Presenter(
+            get(named(RETROFIT_NAMED)),
+            get(),
+            get(),
+            get<AndroidNetworkStatusObservable>(),
+            get(),
+            get()
+        )
+    }
+
+    factory {
+        yuri.dyachenko.githubclient.ui.repo.Presenter(
+            get(),
+            get(),
+            get<AndroidNetworkStatusObservable>()
+        )
     }
 }

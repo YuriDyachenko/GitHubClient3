@@ -6,17 +6,11 @@ import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
-import com.github.terrakok.cicerone.Router
-import moxy.ktx.moxyPresenter
-import org.koin.android.ext.android.get
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import org.koin.android.ext.android.inject
-import org.koin.core.qualifier.named
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUsersBinding
-import yuri.dyachenko.githubclient.di.RETROFIT_NAMED
-import yuri.dyachenko.githubclient.model.DataProvider
-import yuri.dyachenko.githubclient.model.DataSaveProvider
-import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
 import yuri.dyachenko.githubclient.ui.users.Contract.State
 
@@ -24,21 +18,13 @@ class UsersFragment : BaseFragment(R.layout.fragment_users), Contract.View {
 
     private val binding by viewBinding(FragmentUsersBinding::bind)
 
-    private val router by inject<Router>()
-    private val webDataProvider by inject<DataProvider>(named(RETROFIT_NAMED))
-    private val roomDataProvider by inject<DataProvider>()
-    private val roomDataSaveProvider by inject<DataSaveProvider>()
+    @InjectPresenter
+    lateinit var presenter: Presenter
 
-    private val presenter by moxyPresenter {
-        Presenter(
-            webDataProvider,
-            roomDataProvider,
-            roomDataSaveProvider,
-            get<AndroidNetworkStatusObservable>(),
-            router,
-            get()
-        )
-    }
+    private val presenterProvider by inject<Presenter>()
+
+    @ProvidePresenter
+    fun providePresenter() = presenterProvider
 
     private val adapter by lazy { Adapter(presenter) }
 

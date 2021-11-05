@@ -22,7 +22,8 @@ class App : Application() {
                 roomModule,
                 retrofitModule,
                 networkStatusModule,
-                navigationModule
+                navigationModule,
+                presentersModule
             )
         }
     }
