@@ -36,25 +36,27 @@ class UsersFragment : BaseFragment(R.layout.fragment_users), Contract.View {
         }
     }
 
-    override fun setState(state: State) = with(binding) {
+    override fun setState(state: State) {
         when (state) {
-            is State.Success -> {
-                usersLoadingLayout.hide()
-                adapter.submitList(state.list)
-                usersFromTextView.text =
-                    getString(if (state.fromCache) R.string.from_cache else R.string.from_web)
-            }
-            is State.Error -> {
-                usersLoadingLayout.hide()
-                usersRootView.showSnackBar(
-                    state.e.message ?: getString(R.string.something_broke),
-                    R.string.reload
-                ) { presenter.onError() }
-            }
-            State.Loading -> {
-                usersLoadingLayout.show()
-            }
+            is State.Success -> setState(state)
+            is State.Error -> setState(state)
+            is State.Loading -> setState()
         }
+    }
+
+    private fun setState(state: State.Success) = with(binding) {
+        usersLoadingLayout.hide()
+        adapter.submitList(state.list)
+        usersFromTextView.text = getTextCacheOrWeb(state.fromCache)
+    }
+
+    private fun setState(state: State.Error) = with(binding) {
+        usersLoadingLayout.hide()
+        showErrorSnackBar(usersRootView, state.e) { presenter.onError() }
+    }
+
+    private fun setState() = with(binding) {
+        usersLoadingLayout.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {

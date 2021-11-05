@@ -6,8 +6,11 @@ import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import org.koin.android.ext.android.inject
-import yuri.dyachenko.githubclient.*
+import yuri.dyachenko.githubclient.R
+import yuri.dyachenko.githubclient.arguments
 import yuri.dyachenko.githubclient.databinding.FragmentRepoBinding
+import yuri.dyachenko.githubclient.hide
+import yuri.dyachenko.githubclient.show
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
 
 class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
@@ -34,27 +37,28 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
         presenter.onDataReady(userLogin, repoName)
     }
 
-    override fun setState(state: Contract.State) = with(binding) {
+    override fun setState(state: Contract.State) {
         when (state) {
-            is Contract.State.Success -> {
-                repoLoadingLayout.hide()
-                repoNameTextView.text = state.repo.name
-                repoForksCountTextView.text = state.repo.forksCount.toString()
-                repoFromTextView.text =
-                    getString(if (state.fromCache) R.string.from_cache else R.string.from_web)
-            }
-            is Contract.State.Error -> {
-                repoLoadingLayout.hide()
-                repoRootView.showSnackBar(
-                    state.e.message ?: getString(R.string.something_broke),
-                    R.string.reload,
-                    snackBarCallback
-                ) { presenter.onError() }
-            }
-            Contract.State.Loading -> {
-                repoLoadingLayout.show()
-            }
+            is Contract.State.Success -> setState(state)
+            is Contract.State.Error -> setState(state)
+            is Contract.State.Loading -> setState()
         }
+    }
+
+    private fun setState(state: Contract.State.Success) = with(binding) {
+        repoLoadingLayout.hide()
+        repoNameTextView.text = state.repo.name
+        repoForksCountTextView.text = state.repo.forksCount.toString()
+        repoFromTextView.text = getTextCacheOrWeb(state.fromCache)
+    }
+
+    private fun setState(state: Contract.State.Error) = with(binding) {
+        repoLoadingLayout.hide()
+        showErrorSnackBar(repoRootView, state.e) { presenter.onError() }
+    }
+
+    private fun setState() = with(binding) {
+        repoLoadingLayout.show()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
