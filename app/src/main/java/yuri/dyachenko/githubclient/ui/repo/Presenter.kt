@@ -9,10 +9,11 @@ import yuri.dyachenko.githubclient.network.NetworkStatusObservable
 class Presenter(
     private val dataProvider: DataProvider,
     private val cacheDataProvider: DataProvider,
-    private val networkStatusObservable: NetworkStatusObservable,
-    private val userLogin: String,
-    private val repoName: String
+    private val networkStatusObservable: NetworkStatusObservable
 ) : Contract.Presenter() {
+
+    private lateinit var userLogin: String
+    private lateinit var repoName: String
 
     private fun subscribeOnNetworkState() {
         networkStatusObservable
@@ -26,6 +27,12 @@ class Presenter(
 
     override fun onFirstViewAttach() {
         subscribeOnNetworkState()
+        viewState.getData()
+    }
+
+    override fun onDataReady(userLogin: String, repoName: String) {
+        this.userLogin = userLogin
+        this.repoName = repoName
         getData()
     }
 

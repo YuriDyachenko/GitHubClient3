@@ -2,6 +2,7 @@ package yuri.dyachenko.githubclient.ui.user
 
 import moxy.MvpView
 import moxy.viewstate.strategy.alias.AddToEndSingle
+import moxy.viewstate.strategy.alias.Skip
 import yuri.dyachenko.githubclient.model.Repo
 import yuri.dyachenko.githubclient.ui.base.BasePresenter
 
@@ -17,9 +18,13 @@ class Contract {
 
         @AddToEndSingle
         fun setState(state: State)
+
+        @Skip
+        fun getData()
     }
 
     abstract class Presenter : BasePresenter<View>() {
+        abstract fun onDataReady(userLogin: String)
         abstract fun onItemClicked(userLogin: String, repoName: String)
     }
 }
