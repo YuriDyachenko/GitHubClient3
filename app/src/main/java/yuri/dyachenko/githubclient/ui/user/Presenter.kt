@@ -16,6 +16,7 @@ class Presenter(
     private val saveDataProvider: DataSaveProvider,
     private val networkStatusObservable: NetworkStatusObservable,
     private val router: Router,
+    private val screens: Screens,
     private val userLogin: String
 ) : Contract.Presenter() {
 
@@ -39,7 +40,7 @@ class Presenter(
     override fun onUpdate() = getData()
 
     override fun onItemClicked(userLogin: String, repoName: String) {
-        router.navigateTo(Screens.repo(userLogin, repoName))
+        router.navigateTo(screens.repo(userLogin, repoName))
     }
 
     private fun getData() {

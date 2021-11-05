@@ -40,6 +40,7 @@ class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
             roomDataSaveProvider,
             get<AndroidNetworkStatusObservable>(),
             router,
+            get(),
             userLogin
         )
     }

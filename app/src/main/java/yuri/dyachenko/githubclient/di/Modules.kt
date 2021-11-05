@@ -20,6 +20,8 @@ import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.model.DataSaveProvider
 import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
 import yuri.dyachenko.githubclient.room.Storage
+import yuri.dyachenko.githubclient.ui.AppScreens
+import yuri.dyachenko.githubclient.ui.Screens
 
 const val RETROFIT_NAMED = "web"
 
@@ -106,5 +108,11 @@ val roomModule = module {
 val networkStatusModule = module {
     factory {
         AndroidNetworkStatusObservable(androidContext())
+    }
+}
+
+val navigationModule = module {
+    single<Screens> {
+        AppScreens()
     }
 }

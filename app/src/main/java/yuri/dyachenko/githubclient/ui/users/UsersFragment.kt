@@ -35,7 +35,8 @@ class UsersFragment : BaseFragment(R.layout.fragment_users), Contract.View {
             roomDataProvider,
             roomDataSaveProvider,
             get<AndroidNetworkStatusObservable>(),
-            router
+            router,
+            get()
         )
     }
 

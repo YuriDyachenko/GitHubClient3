@@ -5,6 +5,7 @@ import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.Router
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import moxy.MvpAppCompatActivity
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 
 class MainActivity : MvpAppCompatActivity() {
@@ -21,7 +22,7 @@ class MainActivity : MvpAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        savedInstanceState ?: router.newRootScreen(Screens.users())
+        savedInstanceState ?: router.newRootScreen(get<Screens>().users())
     }
 
     override fun onPause() {

@@ -4,10 +4,7 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
-import yuri.dyachenko.githubclient.di.ciceroneModule
-import yuri.dyachenko.githubclient.di.networkStatusModule
-import yuri.dyachenko.githubclient.di.retrofitModule
-import yuri.dyachenko.githubclient.di.roomModule
+import yuri.dyachenko.githubclient.di.*
 
 class App : Application() {
 
@@ -24,7 +21,8 @@ class App : Application() {
                 ciceroneModule,
                 roomModule,
                 retrofitModule,
-                networkStatusModule
+                networkStatusModule,
+                navigationModule
             )
         }
     }
