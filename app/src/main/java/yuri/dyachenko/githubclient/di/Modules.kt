@@ -18,6 +18,7 @@ import yuri.dyachenko.githubclient.impl.StorageDataProviderImpl
 import yuri.dyachenko.githubclient.impl.StorageDataSaveProviderImpl
 import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.model.DataSaveProvider
+import yuri.dyachenko.githubclient.network.AndroidNetworkStatusObservable
 import yuri.dyachenko.githubclient.room.Storage
 
 const val RETROFIT_NAMED = "web"
@@ -99,5 +100,11 @@ val roomModule = module {
 
     factory<DataSaveProvider> {
         StorageDataSaveProviderImpl(get())
+    }
+}
+
+val networkStatusModule = module {
+    factory {
+        AndroidNetworkStatusObservable(androidContext())
     }
 }

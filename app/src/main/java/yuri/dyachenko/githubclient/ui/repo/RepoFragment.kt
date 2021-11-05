@@ -4,6 +4,7 @@ import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.ktx.moxyPresenter
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 import yuri.dyachenko.githubclient.*
@@ -32,7 +33,7 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
         Presenter(
             webDataProvider,
             roomDataProvider,
-            AndroidNetworkStatusObservable(app),
+            get<AndroidNetworkStatusObservable>(),
             userLogin,
             repoName
         )

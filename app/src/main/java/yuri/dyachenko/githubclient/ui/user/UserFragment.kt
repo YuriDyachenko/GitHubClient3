@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.github.terrakok.cicerone.Router
 import moxy.ktx.moxyPresenter
+import org.koin.android.ext.android.get
 import org.koin.android.ext.android.inject
 import org.koin.core.qualifier.named
 import yuri.dyachenko.githubclient.*
@@ -37,7 +38,7 @@ class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
             webDataProvider,
             roomDataProvider,
             roomDataSaveProvider,
-            AndroidNetworkStatusObservable(app),
+            get<AndroidNetworkStatusObservable>(),
             router,
             userLogin
         )
