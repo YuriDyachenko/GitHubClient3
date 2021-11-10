@@ -1,30 +1,28 @@
 package yuri.dyachenko.githubclient
 
 import android.app.Application
-import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
-import org.koin.core.context.startKoin
 import yuri.dyachenko.githubclient.di.*
 
 class App : Application() {
 
+    lateinit var dagger: AppComponent
+
     override fun onCreate() {
         super.onCreate()
-        initKoin()
+        initDagger()
     }
 
-    private fun initKoin() {
-        startKoin {
-            androidLogger()
-            androidContext(this@App)
-            modules(
-                ciceroneModule,
-                roomModule,
-                retrofitModule,
-                networkStatusModule,
-                navigationModule,
-                presentersModule
-            )
-        }
+    private fun initDagger() {
+        dagger = DaggerAppComponent
+            .builder()
+            .contextModule(ContextModule(this))
+            .ciceroneModule(CiceroneModule())
+            .navigationModule(NavigationModule())
+            .networkStatusModule(NetworkStatusModule())
+            .roomModule(RoomModule())
+            .retrofitModule(RetrofitModule())
+            .presentersModule(PresentersModule())
+            .build()
+
     }
 }

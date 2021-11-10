@@ -9,10 +9,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import org.koin.android.ext.android.inject
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUserBinding
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
+import javax.inject.Inject
+import javax.inject.Provider
 
 class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
 
@@ -21,10 +22,11 @@ class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
     @InjectPresenter
     lateinit var presenter: Presenter
 
-    private val presenterProvider by inject<Presenter>()
+    @Inject
+    lateinit var presenterProvider: Provider<Presenter>
 
     @ProvidePresenter
-    fun providePresenter() = presenterProvider
+    fun providePresenter(): Presenter = presenterProvider.get()
 
     private val userLogin: String by lazy {
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
@@ -34,6 +36,11 @@ class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
 
     override fun getData() {
         presenter.onDataReady(userLogin)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        app.dagger.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -82,5 +89,6 @@ class UserFragment : BaseFragment(R.layout.fragment_user, true), Contract.View {
         fun newInstance(login: String): Fragment =
             UserFragment()
                 .arguments(ARG_USER_LOGIN to login)
+
     }
 }

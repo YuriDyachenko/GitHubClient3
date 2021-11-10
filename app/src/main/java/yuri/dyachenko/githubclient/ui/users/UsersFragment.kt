@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import org.koin.android.ext.android.inject
 import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentUsersBinding
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
 import yuri.dyachenko.githubclient.ui.users.Contract.State
+import javax.inject.Inject
+import javax.inject.Provider
 
 class UsersFragment : BaseFragment(R.layout.fragment_users), Contract.View {
 
@@ -21,12 +22,18 @@ class UsersFragment : BaseFragment(R.layout.fragment_users), Contract.View {
     @InjectPresenter
     lateinit var presenter: Presenter
 
-    private val presenterProvider by inject<Presenter>()
+    @Inject
+    lateinit var presenterProvider: Provider<Presenter>
 
     @ProvidePresenter
-    fun providePresenter() = presenterProvider
+    fun providePresenter(): Presenter = presenterProvider.get()
 
     private val adapter by lazy { Adapter(presenter) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        app.dagger.inject(this)
+        super.onCreate(savedInstanceState)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
