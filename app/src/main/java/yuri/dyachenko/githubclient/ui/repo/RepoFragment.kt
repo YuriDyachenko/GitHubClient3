@@ -1,17 +1,16 @@
 package yuri.dyachenko.githubclient.ui.repo
 
+import android.os.Bundle
 import android.view.MenuItem
 import androidx.fragment.app.Fragment
 import by.kirich1409.viewbindingdelegate.viewBinding
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import org.koin.android.ext.android.inject
-import yuri.dyachenko.githubclient.R
-import yuri.dyachenko.githubclient.arguments
+import yuri.dyachenko.githubclient.*
 import yuri.dyachenko.githubclient.databinding.FragmentRepoBinding
-import yuri.dyachenko.githubclient.hide
-import yuri.dyachenko.githubclient.show
 import yuri.dyachenko.githubclient.ui.base.BaseFragment
+import javax.inject.Inject
+import javax.inject.Provider
 
 class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
 
@@ -20,10 +19,11 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
     @InjectPresenter
     lateinit var presenter: Presenter
 
-    private val presenterProvider by inject<Presenter>()
+    @Inject
+    lateinit var presenterProvider: Provider<Presenter>
 
     @ProvidePresenter
-    fun providePresenter() = presenterProvider
+    fun providePresenter(): Presenter = presenterProvider.get()
 
     private val userLogin: String by lazy {
         arguments?.getString(ARG_USER_LOGIN).orEmpty()
@@ -35,6 +35,11 @@ class RepoFragment : BaseFragment(R.layout.fragment_repo, true), Contract.View {
 
     override fun getData() {
         presenter.onDataReady(userLogin, repoName)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        app.dagger.inject(this)
+        super.onCreate(savedInstanceState)
     }
 
     override fun setState(state: Contract.State) {
