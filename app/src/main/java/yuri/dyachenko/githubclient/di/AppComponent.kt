@@ -15,7 +15,8 @@ import javax.inject.Singleton
         NetworkStatusModule::class,
         RoomModule::class,
         RetrofitModule::class,
-        PresentersModule::class
+        PresentersModule::class,
+        SchedulersModule::class
     ]
 )
 interface AppComponent {

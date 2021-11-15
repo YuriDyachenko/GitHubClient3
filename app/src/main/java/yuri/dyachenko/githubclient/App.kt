@@ -20,6 +20,7 @@ class App : Application() {
             .networkStatusModule(NetworkStatusModule())
             .roomModule(RoomModule())
             .retrofitModule(RetrofitModule())
+            .schedulersModule(SchedulersModule())
             .presentersModule(PresentersModule())
             .build()
 
