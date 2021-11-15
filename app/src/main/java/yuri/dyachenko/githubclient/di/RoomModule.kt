@@ -14,10 +14,12 @@ import javax.inject.Singleton
 @Module
 class RoomModule {
 
+    private val dbName = "storage.db"
+
     @Provides
     @Singleton
     fun provideStorage(context: Context): Storage =
-        Room.databaseBuilder(context, Storage::class.java, "storage.db")
+        Room.databaseBuilder(context, Storage::class.java, dbName)
             .build()
 
     @Provides

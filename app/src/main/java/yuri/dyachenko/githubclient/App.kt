@@ -17,7 +17,6 @@ class App : Application() {
             .builder()
             .contextModule(ContextModule(this))
             .ciceroneModule(CiceroneModule())
-            .navigationModule(NavigationModule())
             .networkStatusModule(NetworkStatusModule())
             .roomModule(RoomModule())
             .retrofitModule(RetrofitModule())
