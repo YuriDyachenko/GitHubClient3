@@ -9,5 +9,5 @@ import yuri.dyachenko.githubclient.scheduler.Schedulers
 class SchedulersModule {
 
     @Provides
-    fun provideNetworkStatus(): Schedulers = DefaultSchedulers()
+    fun provideSchedulers(): Schedulers = DefaultSchedulers()
 }
