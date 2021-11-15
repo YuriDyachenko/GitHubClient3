@@ -1,13 +1,12 @@
 package yuri.dyachenko.githubclient.ui.user
 
 import com.github.terrakok.cicerone.Router
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.model.DataSaveProvider
 import yuri.dyachenko.githubclient.model.Repo
 import yuri.dyachenko.githubclient.network.NetworkStatusObservable
+import yuri.dyachenko.githubclient.scheduler.Schedulers
 import yuri.dyachenko.githubclient.ui.Screens
 
 class Presenter(
@@ -16,7 +15,8 @@ class Presenter(
     private val saveDataProvider: DataSaveProvider,
     private val networkStatusObservable: NetworkStatusObservable,
     private val router: Router,
-    private val screens: Screens
+    private val screens: Screens,
+    private val schedulers: Schedulers
 ) : Contract.Presenter() {
 
     private lateinit var userLogin: String
@@ -54,8 +54,8 @@ class Presenter(
 
         defaultProvider()
             .getRepos(userLogin)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulers.background())
+            .observeOn(schedulers.main())
             .doOnSuccess { saveData(it) }
             .subscribeBy(
                 onSuccess = { viewState.setState(Contract.State.Success(it, !isOnline)) },
@@ -68,7 +68,7 @@ class Presenter(
             repos.forEach { repo -> repo.userLogin = userLogin }
             saveDataProvider
                 .addRepos(repos)
-                .subscribeOn(Schedulers.newThread())
+                .subscribeOn(schedulers.background())
                 .subscribe()
                 .autoDispose()
         }

@@ -1,15 +1,15 @@
 package yuri.dyachenko.githubclient.ui.repo
 
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.network.NetworkStatusObservable
+import yuri.dyachenko.githubclient.scheduler.Schedulers
 
 class Presenter(
     private val dataProvider: DataProvider,
     private val cacheDataProvider: DataProvider,
-    private val networkStatusObservable: NetworkStatusObservable
+    private val networkStatusObservable: NetworkStatusObservable,
+    private val schedulers: Schedulers
 ) : Contract.Presenter() {
 
     private lateinit var userLogin: String
@@ -45,8 +45,8 @@ class Presenter(
 
         defaultProvider()
             .getRepo(userLogin, repoName)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeOn(schedulers.background())
+            .observeOn(schedulers.main())
             .subscribeBy(
                 onSuccess = { viewState.setState(Contract.State.Success(it, !isOnline)) },
                 onError = { viewState.setState(Contract.State.Error(it)) }

@@ -6,6 +6,7 @@ import dagger.Provides
 import yuri.dyachenko.githubclient.model.DataProvider
 import yuri.dyachenko.githubclient.model.DataSaveProvider
 import yuri.dyachenko.githubclient.network.NetworkStatusObservable
+import yuri.dyachenko.githubclient.scheduler.Schedulers
 import yuri.dyachenko.githubclient.ui.Screens
 import yuri.dyachenko.githubclient.ui.users.Presenter
 import javax.inject.Named
@@ -20,14 +21,16 @@ class PresentersModule {
         saveDataProvider: DataSaveProvider,
         networkStatusObservable: NetworkStatusObservable,
         router: Router,
-        screens: Screens
+        screens: Screens,
+        schedulers: Schedulers
     ) = Presenter(
         dataProvider,
         cacheDataProvider,
         saveDataProvider,
         networkStatusObservable,
         router,
-        screens
+        screens,
+        schedulers
     )
 
     @Provides
@@ -37,24 +40,28 @@ class PresentersModule {
         saveDataProvider: DataSaveProvider,
         networkStatusObservable: NetworkStatusObservable,
         router: Router,
-        screens: Screens
+        screens: Screens,
+        schedulers: Schedulers
     ) = yuri.dyachenko.githubclient.ui.user.Presenter(
         dataProvider,
         cacheDataProvider,
         saveDataProvider,
         networkStatusObservable,
         router,
-        screens
+        screens,
+        schedulers
     )
 
     @Provides
     fun provideRepoPresenter(
         @Named("web") dataProvider: DataProvider,
         cacheDataProvider: DataProvider,
-        networkStatusObservable: NetworkStatusObservable
+        networkStatusObservable: NetworkStatusObservable,
+        schedulers: Schedulers
     ) = yuri.dyachenko.githubclient.ui.repo.Presenter(
         dataProvider,
         cacheDataProvider,
-        networkStatusObservable
+        networkStatusObservable,
+        schedulers
     )
 }
